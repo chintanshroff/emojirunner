@@ -22,59 +22,52 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public Transform base_1;
+    
     public int cashAmount = 0;
     public int heartAmount = 0;
     public runner_container myRunner;
     public bool isCorrect = true;
 
-    
-   
+    private platform_container platform;
+    private Transform pooledPlatform;
+
+   public List<platform_container> platform_list = new List<platform_container>();
   
    public runner_gate Gate1;
    public runner_gate Gate2;
 
-private void Start() {
-    GetRandomEmoji();
+
+   public List<Material> emojiList = new List<Material>();
+    public List<Material> emojiList_matching = new List<Material>();
+
+private void Start() 
+{
+    
+    SpawnPlatform(new Vector3 (0,0,0));
+    platform_list[platform_list.Count-1].GetRandomEmoji();
 }
-void Update()
+
+
+    
+
+    public void SpawnPlatform(Vector3 pos)
     {
-     if (isCorrect)
-     {
-        base_1.position += new Vector3(0, 0, 1f) * Time.deltaTime * myRunner.playerSpeed;
-     }
-     else
-     {
-        base_1.position -= new Vector3(0, 0, 50f) * Time.deltaTime * myRunner.playerSpeed;
-        isCorrect = true;
-     }
-        
-    }
-
-    public void GetRandomEmoji()
-    {
-        int r = Random.Range(0, myRunner.emojiList.Count);
-        myRunner.runner_mat.SetTexture("_MainTex", myRunner.emojiList[r]);
-
-        int r1 = Random.Range(0, 2);
-        if (r1 == 0)
+        pooledPlatform = GameObjectPool.GetPool("PlatformPool").GetInstance();
+        platform = pooledPlatform.GetComponent<platform_container>();
+        platform.transform.localPosition = pos;
+        for (int i =0; i<GameManager.Instance.platform_list.Count; i++)
         {
-           Gate1.gate_mat.SetTexture("_MainTex", myRunner.emojiList_matching[r+r]);
-           Gate1.isCorrect = true;
-           Gate2.gate_mat.SetTexture("_MainTex", myRunner.emojiList_matching[r+r+1]);
-            Gate2.isCorrect = false;
-
+            GameManager.Instance.platform_list[i].isCurrentPlatform = false;
         }
-        else
-        {
-            Gate1.gate_mat.SetTexture("_MainTex", myRunner.emojiList_matching[r+r+1]);
-             Gate1.isCorrect = false;
-            Gate2.gate_mat.SetTexture("_MainTex", myRunner.emojiList_matching[r+r]);
-             Gate2.isCorrect = true;
-
-        }
-        
+        platform_list.Add(platform);
+        platform.isCurrentPlatform = true;
+       
 
     }
     
+    public void RemovePlatform()
+    {
+        GameObjectPool.GetPool("PlatformPool").ReleaseInstance(platform_list[0].transform);
+        platform_list.Remove(platform_list[0]);
+    }
 }

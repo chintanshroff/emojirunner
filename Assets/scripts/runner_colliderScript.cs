@@ -18,7 +18,7 @@ public class runner_colliderScript : MonoBehaviour
         else if (c.gameObject.tag == "?")
         {
            Debug.Log("?");
-           GameManager.Instance.GetRandomEmoji();
+           GameManager.Instance.platform_list[GameManager.Instance.platform_list.Count-1].GetRandomEmoji();
         }
         
     }
