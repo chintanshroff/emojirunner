@@ -9,7 +9,7 @@ public class runner_container : MonoBehaviour
 
     
 
-     public Renderer runner_rend;
+    // public Renderer runner_rend;
 
     public Transform followerPos;
 

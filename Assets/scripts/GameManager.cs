@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class GameManager : MonoBehaviour
     
     public int cashAmount = 0;
     public int heartAmount = 0;
-    public runner_container myRunner;
+    public runner_container myRunner_container;
     public bool isCorrect = true;
 
     private platform_container platform;
@@ -39,6 +40,9 @@ public class GameManager : MonoBehaviour
 
    public List<Material> emojiList = new List<Material>();
     public List<Material> emojiList_matching = new List<Material>();
+
+    
+    public GameObject GameOverPanel;
 
 private void Start() 
 {
@@ -70,4 +74,10 @@ private void Start()
         GameObjectPool.GetPool("PlatformPool").ReleaseInstance(platform_list[0].transform);
         platform_list.Remove(platform_list[0]);
     }
+
+
+    public void Restart()
+{
+    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+}
 }
