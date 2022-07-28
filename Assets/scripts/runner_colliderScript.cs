@@ -18,10 +18,10 @@ public class runner_colliderScript : MonoBehaviour
                 {
                     hasInteractedWithGates = true;
                     runner_gate runnerGate =  c.gameObject.GetComponentInParent<runner_gate>();
-                    if (!runnerGate.isAttached)
+                    if (!runnerGate.myRunnerScript.isAttached)
                     {
                         runnerGate.AttachToRunner();
-                        runnerGate.isAttached = true;
+                        //runnerGate.myRunnerScript.isAttached = true;
                     }
                 }
             }

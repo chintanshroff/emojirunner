@@ -3172,7 +3172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSpeed: 3
   Keyboard_MovementSpeed: 4
-  Touch_MovementSpeed: 2
+  Touch_MovementSpeed: 1
   followerPos: {fileID: 1811793486}
   myRunners:
   - {fileID: 1428614192}
