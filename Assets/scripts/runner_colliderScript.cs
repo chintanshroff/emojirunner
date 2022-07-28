@@ -6,6 +6,7 @@ public class runner_colliderScript : MonoBehaviour
 {
    
      public runner myRunnerScript;
+     public bool hasInteractedWithGates = false;
 
      void OnTriggerEnter(Collider c)
     {
@@ -13,27 +14,28 @@ public class runner_colliderScript : MonoBehaviour
         {
             if (c.gameObject.tag == "Gate")
             {
-                runner_gate runnerGate =  c.gameObject.GetComponentInParent<runner_gate>();
-                if (!runnerGate.isAttached)
+                if (!hasInteractedWithGates)
                 {
-                    
-                    runnerGate.AttachToRunner();
-                    runnerGate.isAttached = true;
+                    hasInteractedWithGates = true;
+                    runner_gate runnerGate =  c.gameObject.GetComponentInParent<runner_gate>();
+                    if (!runnerGate.isAttached)
+                    {
+                        runnerGate.AttachToRunner();
+                        runnerGate.isAttached = true;
+                    }
                 }
             }
-
             else if (c.gameObject.tag == "?")
             {
                 Debug.Log("?");
                 GameManager.Instance.platform_list[GameManager.Instance.platform_list.Count-1].GetRandomEmoji();
+                hasInteractedWithGates = false;
             }       
             else if (c.gameObject.tag == "Coin")
             {
               StartCoroutine(MoveToPosition(c.transform, new Vector3(0f,5f,0f),0.5f));
             }    
         }
-       
-        
     }
 
     public IEnumerator MoveToPosition(Transform _transform, Vector3 position, float timeToMove)

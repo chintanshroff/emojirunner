@@ -10,7 +10,7 @@ public class runner_gate : MonoBehaviour
     public runner myTpose;
 
     private Transform target;
-   public float smoothSpeed = 0.01f;
+   public float smoothSpeed = 0.05f;
 
    public bool isAttached = false;
    
@@ -27,22 +27,20 @@ private void Awake()
 }
    private void LateUpdate() 
    {
-       if (isAttached)
+        if (GameManager.Instance.isCorrect)
         {
-            if (myRunnerScript.runnerCount>0)
+            if (isAttached)
             {
-                
-                target =  GameManager.Instance.myRunner_container.myRunners[myRunnerScript.runnerCount-1].transform;
-                Vector3 desiredPos = target.position;
-                Vector3 smoothedPos = Vector3.Lerp (transform.position, desiredPos, smoothSpeed);
-                transform.position = new Vector3(smoothedPos.x, transform.position.y,  transform.position.z ) ;
+                if (myRunnerScript.runnerCount>0)
+                {
+                    
+                    target =  GameManager.Instance.myRunner_container.myRunners[myRunnerScript.runnerCount-1].transform;
+                    Vector3 desiredPos = target.position;
+                    Vector3 smoothedPos = Vector3.Lerp (transform.position, desiredPos, smoothSpeed);
+                    transform.position = new Vector3(smoothedPos.x, transform.position.y,  transform.position.z ) ;
+                }
             }
-       
-            
-    }
-
-           
-       
+        }
    }
     public void AttachToRunner()
     {

@@ -7,6 +7,7 @@ public class platform_container : MonoBehaviour
    public runner_gate Gate1;
    public runner_gate Gate2;
    public bool isCurrentPlatform = false;
+   
     
     
     void Update()

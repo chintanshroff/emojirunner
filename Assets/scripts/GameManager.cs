@@ -80,4 +80,9 @@ private void Start()
 {
     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 }
+
+    public void ChangeSpeed(float speed)
+    {
+        myRunner_container.Touch_MovementSpeed = speed;
+    }
 }
