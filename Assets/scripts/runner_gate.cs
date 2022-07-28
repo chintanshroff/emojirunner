@@ -46,39 +46,41 @@ private void Awake()
     {
         if(isCorrectGate)
         {
-           
-                GameManager.Instance.myRunner_container.followerPos.localPosition = new Vector3(0 ,0,GameManager.Instance.myRunner_container.followerPos.localPosition.z+0.02f);
-                Vector3 targetPos =  GameManager.Instance.myRunner_container.followerPos.position;
-                Debug.Log("Attach");
-                transform.parent = GameManager.Instance.myRunner_container.transform;
-                StartCoroutine(MoveToPosition(transform, targetPos,1f));
-                //transform.position = GameManager.Instance.myRunner.followerPos.position;
-                transform.rotation =  GameManager.Instance.myRunner_container.followerPos.rotation;
-                isAttached = true;
-                myGateCollider.SetActive(false);
-                GameManager.Instance.myRunner_container.myRunners.Add(myTpose);
-                myRunnerScript.runnerCount =  GameManager.Instance.myRunner_container.myRunners.Count-1;
+            isAttached = true;
+            myGateCollider.SetActive(false);
+            GameManager.Instance.myRunner_container.followerPos.localPosition = new Vector3(GameManager.Instance.myRunner_container.myRunners[0].transform.localPosition.x ,GameManager.Instance.myRunner_container.myRunners[0].transform.localPosition.y, GameManager.Instance.myRunner_container.followerPos.localPosition.z+0.02f);
+            Vector3 targetPos = GameManager.Instance.myRunner_container.followerPos.position;
+            StartCoroutine(MoveToPosition_add(transform, targetPos,0.5f));
             
-            
-            
+            //transform.position = GameManager.Instance.myRunner.followerPos.position;
+
         }
         else if(!isCorrectGate)
         {
             Debug.Log("incorrect");
-            Transform firstRunner =  GameManager.Instance.myRunner_container.myRunners[0].transform;
-            StartCoroutine(MoveToPosition(firstRunner, new Vector3(0f,15f,0f),0.5f));
+           Transform firstRunner =  GameManager.Instance.myRunner_container.myRunners[0].transform;
+           StartCoroutine(MoveToPosition_remove(firstRunner, new Vector3(0f,15f,0f),0.5f));
+
+            GameManager.Instance.myRunner_container.followerPos.localPosition = new Vector3(GameManager.Instance.myRunner_container.myRunners[0].transform.localPosition.x ,GameManager.Instance.myRunner_container.myRunners[0].transform.localPosition.y, GameManager.Instance.myRunner_container.followerPos.localPosition.z-0.02f);
+           
             
             for (int i = 0; i < GameManager.Instance.myRunner_container.myRunners.Count; i++)
             {
                 GameManager.Instance.myRunner_container.myRunners[i].runnerCount -= 1;
             }
-            LastKickedRunner = GameManager.Instance.myRunner_container.myRunners[0].GetComponent<GameObject>();
+            //LastKickedRunner = GameManager.Instance.myRunner_container.myRunners[0].GetComponent<GameObject>();
             GameManager.Instance.myRunner_container.myRunners.RemoveAt(0);
+            
            
             if ( GameManager.Instance.myRunner_container.myRunners.Count == 0)
             {
                 GameManager.Instance.isCorrect = false;
                 GameManager.Instance.GameOverPanel.SetActive(true); 
+            }
+
+            for (int i = 0; i < GameManager.Instance.myRunner_container.myRunners.Count; i++)
+            {
+               GameManager.Instance.myRunner_container.myRunners[i].MoveStepBackwards();
             }
             
 
@@ -86,8 +88,40 @@ private void Awake()
         } 
     }
 
-    public IEnumerator MoveToPosition(Transform _transform, Vector3 position, float timeToMove)
+    
+
+    public IEnumerator MoveToPosition_add(Transform _transform, Vector3 position, float timeToMove)
     {
+        
+        
+
+        //yield return new WaitForSeconds(.2f);
+       
+        Debug.Log("Attach");
+        transform.parent = GameManager.Instance.myRunner_container.transform;
+        transform.rotation =  GameManager.Instance.myRunner_container.followerPos.rotation;
+        GameManager.Instance.myRunner_container.myRunners.Add(myTpose);
+        myRunnerScript.runnerCount =  GameManager.Instance.myRunner_container.myRunners.Count-1;
+
+        Vector3 currentPos = _transform.position;
+        float t = 0f;
+
+        while (t < 1)
+        {
+            t += Time.deltaTime/timeToMove;
+            _transform.position = Vector3.Lerp(currentPos, position,t);
+            yield return null;
+          
+        }
+        
+        
+         
+    }
+
+     public IEnumerator MoveToPosition_remove(Transform _transform, Vector3 position, float timeToMove)
+    {
+        
+
         Vector3 currentPos = _transform.position;
         float t = 0f;
 
